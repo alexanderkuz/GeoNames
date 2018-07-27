@@ -26,6 +26,15 @@ class TimezoneController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'HttpCache'=> [
+                'class' => 'yii\filters\HttpCache',
+                'only' => ['index'],
+                'cacheControlHeader'=>'public, max-age=360000',
+                'lastModified' => function ($action, $params) {
+                    $q = new \yii\db\Query();
+                    return $q->from('TimeZone')->max('UNIX_TIMESTAMP(UpdatedDate)');
+                },
+            ],
         ];
     }
 
